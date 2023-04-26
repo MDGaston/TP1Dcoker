@@ -1,0 +1,118 @@
+{
+	"info": {
+		"_postman_id": "7c85a1f6-a460-4a64-81cf-730125f125d1",
+		"name": "Test Api Cola Usuarios",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27122567"
+	},
+	"item": [
+		{
+			"name": "http://127.0.0.1/usuario",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Codigo de estado 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Formato de la respuesta\", function () {\r",
+							"    pm.response.to.have.jsonBody();\r",
+							"    pm.response.to.have.jsonBody('position');\r",
+							"    pm.response.to.have.jsonBody('hora');\r",
+							"    pm.response.to.have.jsonBody('id');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"La posición de la cola es un número\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.position).to.be.an('number');\r",
+							"    pm.expect(jsonData.position).to.satisfy(Number.isInteger);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Formato del ID\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.id).to.match(/[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}/);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Formato de la fecha\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.hora).to.match(/\\d{4}\\/\\d{2}\\/\\d{2}/);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1/usuario",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"path": [
+						"usuario"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1/borrarCola",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Test de codigo de estado 200\r",
+							"pm.test(\"Codigo de estado 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// Verificar que el mensaje de respuesta sea el esperado\r",
+							"pm.test(\"Mensaje correcto\", function () {\r",
+							"    pm.expect(pm.response.json().message).to.eql(\"Cola de usuarios reseteada\");\r",
+							"});\r",
+							"\r",
+							"// Test para verificar que despues de borrar la cola se encuentra vacia\r",
+							"pm.test(\"Cola vacía despues de borrar\", function () {\r",
+							"    pm.expect(pm.response.json()).to.eql({\"message\": \"Cola de usuarios reseteada\"});\r",
+							"    pm.sendRequest({\r",
+							"        url: \"http://127.0.0.1/colaUsuarios\",\r",
+							"        method: \"GET\"\r",
+							"    }, function (err, res) {\r",
+							"        pm.expect(res.json()).to.eql([]);\r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1/borrarCola",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"path": [
+						"borrarCola"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
