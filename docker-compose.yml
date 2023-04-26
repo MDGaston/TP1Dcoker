@@ -1,0 +1,22 @@
+services:
+  # Inicio del Servidor Grpc.
+  servidor:
+    build: servidorGrpc/
+
+    #command: python ./app/idgenerator.py
+
+  # Inicio de la api rest
+  cliente:
+
+    build: RestApi/
+    # Creo un volumen para mantener el log
+    volumes:
+      - ./RestApi/api/log:/app/log
+    # vinculacion de mi puerto con el del contenedor
+    ports:
+      - 80:80
+
+    working_dir: /app
+    #Dependencia para que inicie primero el server de Grpc
+    depends_on:
+      - servidor 
