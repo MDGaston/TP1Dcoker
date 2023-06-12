@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package example;
+
+service IdService {
+  rpc GetId (Empty) returns (Id) {}
+}
+
+message Id {
+  string value = 1;
+}
+
+message Empty {}
