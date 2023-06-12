@@ -12,7 +12,7 @@ REST es un estilo de arquitectura para diseñar servicios web que se comunican a
 
 Las caracteristicas de REST son :
 * Es muy facil de entender y consumir hay miles de bibliotecas que ayudan a su implementacion.
-* Funciona en cualquier navegador y tiene una alta compatibilidad entre diferentes plataformas
+* Tiene una alta compatibilidad entre diferentes plataformas
 * Su comunicacion esta basada en texto JSON o XML que si bien son faciles de leer, pueden generar sobrecarga de datos en comparación con formatos más compactos como gRPC o Apache Avro. Por lo que no es eficiente a la hora de mover volumenes muy grandes de datos.
 
 # 
