@@ -10,3 +10,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Comando en el cmd para levantar la api
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]
+
+# Exponer el puerto 80
+EXPOSE 80

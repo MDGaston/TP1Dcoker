@@ -1,3 +1,4 @@
+import logging
 from fastapi import FastAPI, Request
 from pydantic import BaseModel
 from starlette.responses import RedirectResponse
@@ -5,18 +6,22 @@ from queue import Queue
 from datetime import datetime
 from idgeneratorclient import generate_id
 
+logging.basicConfig(
+    filename='log/access_log.txt',
+    format='%(asctime)s - %(message)s',
+    level=logging.INFO
+)
+
 app = FastAPI()
 
-#
+
 @app.middleware("http")
 async def add_process_time_header(request: Request, call_next):
     start_time = datetime.utcnow()
     response = await call_next(request)
     process_time = (datetime.utcnow() - start_time).microseconds
     ip_address = request.client.host
-    with open("log/access_log.txt", "a") as f:
-        f.write(
-            f"{datetime.now().strftime('%Y/%m/%d %H:%M:%S')} - {ip_address} - {request.method} {request.url.path} - {process_time}ms\n")
+    logging.info(f"{ip_address} - {request.method} {request.url.path} - {process_time}ms")
     return response
 
 
@@ -53,10 +58,9 @@ def obtener_cola_usuarios():
     return list(cola_usuarios.queue)
 
 
-@app.get("/borrarCola")
-async def reset_queue():
+@app.delete("/borrarCola")
+def reset_queue():
     # Vaciamos la cola de usuarios
     global cola_usuarios
     cola_usuarios = Queue()
     return {"message": "Cola de usuarios reseteada"}
-
